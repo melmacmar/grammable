@@ -3,7 +3,6 @@ class CreateGrams < ActiveRecord::Migration
     create_table :grams do |t|
       t.text :message
       
-
       t.timestamps
     end
   end
