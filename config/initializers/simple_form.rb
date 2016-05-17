@@ -1,5 +1,3 @@
-following line.
-
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
   config.input_class = "form-control"
