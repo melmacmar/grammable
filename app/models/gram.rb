@@ -3,3 +3,6 @@ class Gram < ActiveRecord::Base
   
   belongs_to :user
 end
+class Gram < ActiveRecord::Base
+  mount_uploader :picture, PictureUploader
+end
