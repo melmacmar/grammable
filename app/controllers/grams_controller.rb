@@ -1,20 +1,14 @@
 class GramsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_gram, only: [:edit, :update, :destroy]
   
   def destroy
-    @gram = Gram.find_by_id(params[:id])
-    return render_not_found if @gram.blank?
     @gram.destroy
     redirect_to root_path
   end
   
   def update
-    @gram = Gram.find_by_id(params[:id])
-    return render_not_found if @gram.blank?
-    
-    @gram.update_attributes(gram_params)
-    
-    if @gram.valid?
+    if @gram.update(gram_params)
       redirect_to root_path
     else
       return render :edit, status: :unprocessable_entity
@@ -30,13 +24,10 @@ class GramsController < ApplicationController
   end
   
   def show
-    @gram = Gram.find_by_id(params[:id])
-    render_not_found if @gram.blank?
+    @gram = Gram.find(params[:id])
   end
   
   def edit
-    @gram = Gram.find_by_id(params[:id])
-    render_not_found if @gram.blank?
   end
   
   def create
@@ -49,11 +40,13 @@ class GramsController < ApplicationController
   end
   
   private
+
+  def set_gram
+    @gram = Gram.find(params[:id])
+    render text: 'You do not have permission for this action.', status: :forbidden if @gram.user != current_user
+  end
   
   def gram_params
     params.require(:gram).permit(:message, :picture)
   end
-
-
-
 end
